@@ -7,12 +7,17 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.commons.text.StringEscapeUtils;
 import org.jsoup.Jsoup;
+import org.jsoup.helper.W3CDom;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Entities;
 import org.jsoup.parser.Parser;
 import org.jsoup.safety.Whitelist;
 import org.jsoup.select.Elements;
+
+import javax.xml.transform.*;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 public class JsoupParsingService extends BaseParsingService implements ParsingService {
     public String parseFile(String inputFile) {
@@ -151,11 +156,12 @@ public class JsoupParsingService extends BaseParsingService implements ParsingSe
     public void createOutputFile(Document jsoupDocument, String outputFile) {
         Document.OutputSettings outputSettings = new Document.OutputSettings();
         outputSettings.syntax(Document.OutputSettings.Syntax.xml);
-        outputSettings.prettyPrint(true);
+
+        outputSettings.prettyPrint(false);
         outputSettings.charset("UTF-8");
         outputSettings.escapeMode(Entities.EscapeMode.xhtml);
-        outputSettings.indentAmount(4);
-        outputSettings.outline(true);
+        //outputSettings.indentAmount(4);
+        outputSettings.outline(false);
         jsoupDocument.outputSettings(outputSettings);
 
         String fileContent = jsoupDocument.outerHtml();
@@ -168,6 +174,41 @@ public class JsoupParsingService extends BaseParsingService implements ParsingSe
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+
+    public void createOutputFileW3(Document jsoupDocument, String outputFile) {
+
+        //String fileContent = jsoupDocument.outerHtml();
+
+
+
+
+
+
+
+        W3CDom w3CDom = new W3CDom();
+        org.w3c.dom.Document document = w3CDom.fromJsoup(jsoupDocument);
+
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        try {
+
+            TransformerFactory tf = TransformerFactory.newInstance();
+            Transformer transformer = tf.newTransformer();
+            transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
+            transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+            //transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
+
+            transformer.transform(new DOMSource(document), new StreamResult(new File(outputFile)));
+
+        } catch (TransformerConfigurationException e) {
+            throw new RuntimeException(e);
+        } catch (TransformerException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
 

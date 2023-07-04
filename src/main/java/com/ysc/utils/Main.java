@@ -113,7 +113,8 @@ public class Main {
 
         //Create new with "escaped_" prefix
         String newFile = renameFile("unescaped", inputFile);
-        service.createOutputFile(document, newFile);
+         //service.createOutputFile(document, newFile);
+        service.createOutputFileW3(document, newFile);
     }
 
     private static void escapeParameters(String[] args, JsoupParsingService service) {
@@ -128,7 +129,8 @@ public class Main {
 
         //Create new with "escaped_" prefix
         String newFile = renameFile("escaped", inputFile);
-        service.createOutputFile(document, newFile);
+//        service.createOutputFile(document, newFile);
+        service.createOutputFileW3(document, newFile);
     }
 
     private static boolean isZeroParameters(String[] args) {

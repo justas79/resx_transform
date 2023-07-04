@@ -13,3 +13,13 @@ java -jar build/libs/resx_file_transformer-1.0-SNAPSHOT-all.jar analyse ProjectS
 3) Escape file.
 java -jar build/libs/resx_file_transformer-1.0-SNAPSHOT-all.jar escape transformed_ProjectServiceResources.en.resx
 generated: reverted_transformed_ProjectServiceResources.en.resx
+
+
+
+
+Examples:
+
+
+References:
+
+check for unescaped key on ProjectService: Jdi.Scales.Resilience.IndividualPotentialSummary.ManagerBehavioralDescription.High
